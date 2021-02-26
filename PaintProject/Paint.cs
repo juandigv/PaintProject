@@ -394,7 +394,7 @@ namespace PaintProject
                     if (pixelMatrix[x, y] != null && pixelMatrix[x, y].groupId != null && pixelMatrix[x, y].groupId == selectedGroupId)
                     {
                         tempList.Push(pixelMatrix[x, y]);
-                        erasePixel(x, y);
+                        erasePixel(x-offsetX, y-offsetY);
                     }
                 }
             }
@@ -408,7 +408,7 @@ namespace PaintProject
                 Pixel p = tempList.Pop();
                 int px = Convert.ToInt32(((p.x - dx) * Math.Cos(angle)) - ((p.y - dy) * Math.Sin(angle)));
                 int py = Convert.ToInt32(((p.x - dx) * Math.Sin(angle)) + ((p.y - dy) * Math.Cos(angle)));
-                drawPixel(px + dx, py + dy, p.groupId, p.color);
+                drawPixel(px + dx-offsetX, py + dy-offsetY, p.groupId, p.color);
             }
         }
         private void rotateLButton_Click(object sender, EventArgs e)
