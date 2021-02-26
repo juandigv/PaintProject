@@ -35,7 +35,6 @@ namespace PaintProject
         private void UpdateGridValues()
         {
             int drawingWidth = 930, drawingHeight = 600;
-
             Columns = Convert.ToInt32(numericWidth.Value);
             Rows = Convert.ToInt32(numericHeight.Value);
             if (drawingHeight < (Rows * pixelSize))
@@ -58,7 +57,8 @@ namespace PaintProject
                 drawingPanel.Width = (Columns * pixelSize);
                 hScrollBar.Maximum = 0;
             }
-            labelCanva.Text = String.Format("[ {0} , {1} ] to [ {2} , {3} ]",  offsetX, offsetY,Columns - hScrollBar.Maximum + offsetX, Rows - vScrollBar.Maximum + offsetY);
+
+            labelCanva.Text = String.Format("[ {0} , {1} ] to [ {2} , {3} ]", offsetX, offsetY, Columns - hScrollBar.Maximum + offsetX, Rows - vScrollBar.Maximum + offsetY);
 
             if (pixelMatrix != null)
             {
@@ -100,7 +100,6 @@ namespace PaintProject
                     y += pixelSize;
                 }
             }
-
         }
 
         private void restoreDrawing()
@@ -170,10 +169,10 @@ namespace PaintProject
                 if (pixelMatrix[fixX, fixY] != null)
                 {
                     selectedGroupId = pixelMatrix[fixX, fixY].groupId;
-                    if(selectedGroupId != null)
+                    if (selectedGroupId != null)
                     {
                         transformationGroup.Enabled = true;
-                    }       
+                    }
                 }
             }
 
@@ -235,16 +234,16 @@ namespace PaintProject
         }
         private void colorPictureBox_Click(object sender, EventArgs e)
         {
-            ColorDialog MyDialog = new ColorDialog();
-            MyDialog.AllowFullOpen = false;
-            MyDialog.ShowHelp = true;
-            MyDialog.AllowFullOpen = true;
-            MyDialog.Color = colorPictureBox.BackColor;
-            if (MyDialog.ShowDialog() == DialogResult.OK)
+            ColorDialog colorDialog = new ColorDialog();
+            colorDialog.AllowFullOpen = false;
+            colorDialog.ShowHelp = true;
+            colorDialog.AllowFullOpen = true;
+            colorDialog.Color = colorPictureBox.BackColor;
+            if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                colorPictureBox.BackColor = MyDialog.Color;
-                colorPen.Color = MyDialog.Color;
-                brush.Color = MyDialog.Color;
+                colorPictureBox.BackColor = colorDialog.Color;
+                colorPen.Color = colorDialog.Color;
+                brush.Color = colorDialog.Color;
             }
         }
 
@@ -299,7 +298,7 @@ namespace PaintProject
 
         private void scaleButton_Click(object sender, EventArgs e)
         {
-            if(selectedGroupId == null) { return; }
+            if (selectedGroupId == null) { return; }
             Stack<Pixel> tempList = new Stack<Pixel>();
             for (int y = 0; y < Rows; y++)
             {
@@ -315,10 +314,10 @@ namespace PaintProject
             int dx = (tempList.Last().x + tempList.Peek().x) / 2;
             int dy = (tempList.Last().y + tempList.Peek().y) / 2;
             double scale = Convert.ToDouble(numericScale.Value);
-            while(tempList.Count >0)
+            while (tempList.Count > 0)
             {
                 Pixel p = tempList.Pop();
-                int x = Convert.ToInt32(Math.Floor((p.x-dx) * scale))+dx, y = Convert.ToInt32(Math.Floor((p.y-dy) * scale))+dy;
+                int x = Convert.ToInt32(Math.Floor((p.x - dx) * scale)) + dx, y = Convert.ToInt32(Math.Floor((p.y - dy) * scale)) + dy;
                 drawPixel(x, y, p.groupId, p.color);
                 if (scale > 1)
                 {
@@ -336,29 +335,11 @@ namespace PaintProject
             }
         }
 
-        private void vScrollBar_Scroll(object sender, ScrollEventArgs e)
+        private void disableDrawScreen(object sender, ScrollEventArgs e)
         {
             drawScreen = false;
         }
-
-        private void hScrollBar_Scroll(object sender, ScrollEventArgs e)
-        {
-            drawScreen = false;
-        }
-
-        private void vScrollBar_MouseCaptureChanged(object sender, EventArgs e)
-        {
-            drawScreen = true;
-            restoreDrawing();
-        }
-
-        private void hScrollBar_MouseCaptureChanged(object sender, EventArgs e)
-        {
-            drawScreen = true;
-            restoreDrawing();
-        }
-
-        private void trackBarPixel_MouseCaptureChanged_1(object sender, EventArgs e)
+        private void enableDrawScreen(object sender, EventArgs e)
         {
             drawScreen = true;
             restoreDrawing();
@@ -398,9 +379,7 @@ namespace PaintProject
                     case 3://Right
                         drawPixel(p.x + distance - offsetX, p.y - offsetY, p.groupId, p.color);
                         break;
-
                 }
-
             }
         }
 
@@ -462,7 +441,6 @@ namespace PaintProject
             {
                 circleMidpoint(xa, ya, xb, yb);
             }
-
         }
 
         private void lineBresenham(int xa, int ya, int xb, int yb)
@@ -509,7 +487,8 @@ namespace PaintProject
             int x = 0;
             int y = radius;
             int p = 1 - radius;
-            circlePlotPoints(xa, ya, x, y, generatedID);
+            simetricPlotPoints(xa, ya, x, y, generatedID);
+            simetricPlotPoints(xa, ya, y, x, generatedID);
             while (x < y)
             {
                 x++;
@@ -522,21 +501,9 @@ namespace PaintProject
                     y--;
                     p += 2 * (x - y) + 1;
                 }
-                circlePlotPoints(xa, ya, x, y, generatedID);
+                simetricPlotPoints(xa, ya, x, y, generatedID);
+                simetricPlotPoints(xa, ya, y, x, generatedID);
             }
-
-        }
-
-        private void circlePlotPoints(int xa, int ya, int x, int y, string generatedID)
-        {
-            drawPixel(xa + x, ya + y, generatedID);
-            drawPixel(xa - x, ya + y, generatedID);
-            drawPixel(xa + x, ya - y, generatedID);
-            drawPixel(xa - x, ya - y, generatedID);
-            drawPixel(xa + y, ya + x, generatedID);
-            drawPixel(xa - y, ya + x, generatedID);
-            drawPixel(xa + y, ya - x, generatedID);
-            drawPixel(xa - y, ya - x, generatedID);
 
         }
 
@@ -560,7 +527,7 @@ namespace PaintProject
             int twoRx2 = 2 * rx2;
             int twoRy2 = 2 * ry2;
             int p, x = 0, y = ry, px = 0, py = twoRx2 * y;
-            ellipsePlotPoints(xa, ya, x, y, generatedID);
+            simetricPlotPoints(xa, ya, x, y, generatedID);
             p = Convert.ToInt32(ry2 - (rx2 * ry) + (0.25 * rx2));
             while (px < py)
             {
@@ -576,7 +543,7 @@ namespace PaintProject
                     py -= twoRx2;
                     p += ry2 + px - py;
                 }
-                ellipsePlotPoints(xa, ya, x, y, generatedID);
+                simetricPlotPoints(xa, ya, x, y, generatedID);
             }
             p = Convert.ToInt32(ry2 * (x + 0.5) * (x + 0.5) + rx2 * (y - 1) * (y - 1) - rx2 * ry2);
             while (y > 0)
@@ -593,39 +560,16 @@ namespace PaintProject
                     px += twoRy2;
                     p += rx2 - py + px;
                 }
-                ellipsePlotPoints(xa, ya, x, y, generatedID);
+                simetricPlotPoints(xa, ya, x, y, generatedID);
             }
         }
-        private void ellipsePlotPoints(int xa, int ya, int x, int y, string generatedID)
+
+        private void simetricPlotPoints(int xa, int ya, int x, int y, string generatedID)
         {
             drawPixel(xa + x, ya + y, generatedID);
             drawPixel(xa - x, ya + y, generatedID);
             drawPixel(xa + x, ya - y, generatedID);
             drawPixel(xa - x, ya - y, generatedID);
-        }
-
-        private void floodFillAlgorithmRecursive(int x, int y, Color newColor, Color oldColor)
-        {
-            if (x < Columns && y < Rows && x >= 0 && y >= 0)
-            {
-                if (oldColor == Color.Empty && newColor != oldColor)
-                {
-                    drawPixel(x, y, null);
-                    floodFillAlgorithmRecursive(x + 1, y, newColor, oldColor);
-                    floodFillAlgorithmRecursive(x - 1, y, newColor, oldColor);
-                    floodFillAlgorithmRecursive(x, y + 1, newColor, oldColor);
-                    floodFillAlgorithmRecursive(x, y - 1, newColor, oldColor);
-                }
-                else if (pixelMatrix[x, y] != null && pixelMatrix[x, y].color == oldColor && newColor != oldColor)
-                {
-                    drawPixel(x, y, null);
-                    floodFillAlgorithmRecursive(x + 1, y, newColor, oldColor);
-                    floodFillAlgorithmRecursive(x - 1, y, newColor, oldColor);
-                    floodFillAlgorithmRecursive(x, y + 1, newColor, oldColor);
-                    floodFillAlgorithmRecursive(x, y - 1, newColor, oldColor);
-                }
-
-            }
         }
 
         private void floodFillAlgorithm(int x, int y, Color newColor, Color oldColor)
@@ -674,9 +618,7 @@ namespace PaintProject
                             visited.Push(new Point(px, py + 1));
                         }
                     }
-
                 }
-
             }
         }
 
@@ -696,7 +638,6 @@ namespace PaintProject
             xIncrement = dx / (float)steps;
             yIncrement = dy / (float)steps;
             drawPixel(xa, ya, generatedID);
-            //Console.WriteLine("[{0},{1}] [{2},{3}] \n dx = {4} dy= {5} \n xIncrement={6} yIncrement= {7} Steps={8}", xa, ya, xb, yb, dx, dy, xIncrement, yIncrement, steps);
             for (int i = 0; i < steps; i++)
             {
                 x += xIncrement;
@@ -721,28 +662,22 @@ namespace PaintProject
                 try
                 {
                     Pixel pixel = new Pixel(x, y, brush.Color, groupId);
-
                     if (pixelMatrix[x, y] != pixel)
                     {
                         pixelMatrix[x, y] = pixel;
-
                         if (xd < (Columns + offsetX - hScrollBar.Maximum) && yd < (Rows + offsetY - vScrollBar.Maximum))
                         {
                             Rectangle rect = new Rectangle(xd * pixelSize, yd * pixelSize, pixelSize, pixelSize);
                             pixelGraphics.DrawRectangle(colorPen, rect);
                             pixelGraphics.FillRectangle(brush, rect);
                         }
-
                     }
-
-
                 }
                 catch (System.IndexOutOfRangeException)
                 {
                     Console.WriteLine("You are drawing outside of the area");
                 }
             }
-
         }
 
         private void drawPixel(int xd, int yd, string groupId, Color color)
@@ -755,7 +690,6 @@ namespace PaintProject
                 try
                 {
                     Pixel pixel = new Pixel(x, y, color, groupId);
-
                     if (pixelMatrix[x, y] != pixel)
                     {
                         pixelMatrix[x, y] = pixel;
@@ -773,7 +707,6 @@ namespace PaintProject
                     Console.WriteLine("You are drawing outside of the area");
                 }
             }
-
         }
 
         private void erasePixel(int xd, int yd)
@@ -811,7 +744,6 @@ namespace PaintProject
         public int x { set; get; }
         public int y { set; get; }
         public Color color { set; get; }
-
         public string groupId { set; get; }
     }
 }

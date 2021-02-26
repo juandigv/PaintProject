@@ -151,7 +151,7 @@ namespace PaintProject
             this.trackBarPixel.Value = 50;
             this.trackBarPixel.Scroll += new System.EventHandler(this.trackBarPixel_Scroll);
             this.trackBarPixel.ValueChanged += new System.EventHandler(this.pixelNumeric_ValueChanged);
-            this.trackBarPixel.MouseCaptureChanged += new System.EventHandler(this.trackBarPixel_MouseCaptureChanged_1);
+            this.trackBarPixel.MouseCaptureChanged += new System.EventHandler(this.enableDrawScreen);
             // 
             // buttonClear
             // 
@@ -381,9 +381,9 @@ namespace PaintProject
             this.hScrollBar.Name = "hScrollBar";
             this.hScrollBar.Size = new System.Drawing.Size(929, 17);
             this.hScrollBar.TabIndex = 10;
-            this.hScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hScrollBar_Scroll);
+            this.hScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.disableDrawScreen);
             this.hScrollBar.ValueChanged += new System.EventHandler(this.hScrollBar_ValueChanged);
-            this.hScrollBar.MouseCaptureChanged += new System.EventHandler(this.hScrollBar_MouseCaptureChanged);
+            this.hScrollBar.MouseCaptureChanged += new System.EventHandler(this.enableDrawScreen);
             // 
             // vScrollBar
             // 
@@ -393,9 +393,9 @@ namespace PaintProject
             this.vScrollBar.Name = "vScrollBar";
             this.vScrollBar.Size = new System.Drawing.Size(17, 628);
             this.vScrollBar.TabIndex = 11;
-            this.vScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar_Scroll);
+            this.vScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.disableDrawScreen);
             this.vScrollBar.ValueChanged += new System.EventHandler(this.vScrollBar_ValueChanged);
-            this.vScrollBar.MouseCaptureChanged += new System.EventHandler(this.vScrollBar_MouseCaptureChanged);
+            this.vScrollBar.MouseCaptureChanged += new System.EventHandler(this.enableDrawScreen);
             // 
             // transformationGroup
             // 

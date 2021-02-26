@@ -26,4 +26,4 @@ A Microsoft Paint like clone developed in Visual Studio using C# and Windows For
 
 * Figure Scaling (Using a Scaling Factor Number)
 * Figure Traslation (Selectable direction and pixel distance)
-* ~~Rotation of Figure to left and right~~ To Be Implemented
+* Rotation of Figure to left and right (Currently rotates 90 degrees)
