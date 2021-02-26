@@ -58,6 +58,7 @@ namespace PaintProject
                 drawingPanel.Width = (Columns * pixelSize);
                 hScrollBar.Maximum = 0;
             }
+            labelCanva.Text = String.Format("[ {0} , {1} ] to [ {2} , {3} ]",  offsetX, offsetY,Columns - hScrollBar.Maximum + offsetX, Rows - vScrollBar.Maximum + offsetY);
 
             if (pixelMatrix != null)
             {
@@ -403,7 +404,7 @@ namespace PaintProject
 
         private void rotateLButton_Click(object sender, EventArgs e)
         {
-          /*  List<Pixel> tempList = new List<Pixel>();
+            List<Pixel> tempList = new List<Pixel>();
             for (int y = 0; y < Rows; y++)
             {
                 for (int x = 0; x < Columns; x++)
@@ -416,20 +417,45 @@ namespace PaintProject
                 }
             }
 
+            double angle = 0.785398;
             foreach (Pixel p in tempList)
             {
-                int px = Convert.ToInt32((p.x * 0) - (p.y * -1));
-                int py = Convert.ToInt32((p.x * -1) + (p.y * 0));
+               
+                int px = Convert.ToInt32((p.x * Math.Cos(angle)) - (p.y * Math.Sin(angle)));
+                int py = Convert.ToInt32((p.x * Math.Sin(angle)) + (p.y * Math.Cos(angle)));
                 Console.WriteLine(String.Format("{0},{1} to {2},{3}", p.x, p.y, px, py));
                 drawPixel(px, py, p.groupId, p.color);
 
 
-            }*/
+            }
         }
 
         private void rotateRButton_Click(object sender, EventArgs e)
         {
+            List<Pixel> tempList = new List<Pixel>();
+            for (int y = 0; y < Rows; y++)
+            {
+                for (int x = 0; x < Columns; x++)
+                {
+                    if (pixelMatrix[x, y] != null && pixelMatrix[x, y].groupId != null && pixelMatrix[x, y].groupId == selectedGroupId)
+                    {
+                        tempList.Add(pixelMatrix[x, y]);
+                        erasePixel(x, y);
+                    }
+                }
+            }
 
+            double angle = -0.785398;
+            foreach (Pixel p in tempList)
+            {
+
+                int px = Convert.ToInt32((p.x * Math.Cos(angle)) - (p.y * Math.Sin(angle)));
+                int py = Convert.ToInt32((p.x * Math.Sin(angle)) + (p.y * Math.Cos(angle)));
+                Console.WriteLine(String.Format("{0},{1} to {2},{3}", p.x, p.y, px, py));
+                drawPixel(px, py, p.groupId, p.color);
+
+
+            }
         }
 
         private int getautoIncID()
@@ -624,7 +650,7 @@ namespace PaintProject
             Stack<Point> visited = new Stack<Point>();
             stack.Push(new Point(x, y));
             visited.Push(new Point(x, y));
-
+            string generatedID = "FF-" + getautoIncID();
             while (stack.Count > 0)
             {
                 bool checkNeighbors = false;
@@ -634,7 +660,7 @@ namespace PaintProject
                 {
                     if ((oldColor == Color.Empty && (pixelMatrix[px, py] == null)) || (pixelMatrix[px, py] != null && pixelMatrix[px, py].color == oldColor && newColor != oldColor))
                     {
-                        drawPixel(px - offsetX, py - offsetY, null);
+                        drawPixel(px - offsetX, py - offsetY, generatedID);
                         checkNeighbors = true;
                     }
                     if (checkNeighbors)

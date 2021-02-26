@@ -62,6 +62,7 @@ namespace PaintProject
             this.traslationButton = new System.Windows.Forms.Button();
             this.numericScale = new System.Windows.Forms.NumericUpDown();
             this.scaleButton = new System.Windows.Forms.Button();
+            this.labelCanva = new System.Windows.Forms.Label();
             this.numbersBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPixel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericHeight)).BeginInit();
@@ -520,12 +521,23 @@ namespace PaintProject
             this.scaleButton.UseVisualStyleBackColor = false;
             this.scaleButton.Click += new System.EventHandler(this.scaleButton_Click);
             // 
+            // labelCanva
+            // 
+            this.labelCanva.AutoSize = true;
+            this.labelCanva.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.labelCanva.Location = new System.Drawing.Point(12, 9);
+            this.labelCanva.Name = "labelCanva";
+            this.labelCanva.Size = new System.Drawing.Size(40, 13);
+            this.labelCanva.TabIndex = 13;
+            this.labelCanva.Text = "[ 0 , 0 ]";
+            // 
             // Paint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(1177, 668);
+            this.Controls.Add(this.labelCanva);
             this.Controls.Add(this.transformationGroup);
             this.Controls.Add(this.vScrollBar);
             this.Controls.Add(this.hScrollBar);
@@ -552,6 +564,7 @@ namespace PaintProject
             ((System.ComponentModel.ISupportInitialize)(this.numericTraslation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericScale)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -590,6 +603,7 @@ namespace PaintProject
         private System.Windows.Forms.Button traslationButton;
         private System.Windows.Forms.Button rotateRButton;
         private System.Windows.Forms.Button rotateLButton;
+        private System.Windows.Forms.Label labelCanva;
     }
 }
 
