@@ -300,23 +300,25 @@ namespace PaintProject
         private void scaleButton_Click(object sender, EventArgs e)
         {
             if(selectedGroupId == null) { return; }
-            List<Pixel> tempList = new List<Pixel>();
+            Stack<Pixel> tempList = new Stack<Pixel>();
             for (int y = 0; y < Rows; y++)
             {
                 for (int x = 0; x < Columns; x++)
                 {
                     if (pixelMatrix[x, y] != null && pixelMatrix[x, y].groupId != null && pixelMatrix[x, y].groupId == selectedGroupId)
                     {
-                        tempList.Add(pixelMatrix[x, y]);
+                        tempList.Push(pixelMatrix[x, y]);
                         erasePixel(x, y);
                     }
                 }
             }
-
+            int dx = (tempList.Last().x + tempList.Peek().x) / 2;
+            int dy = (tempList.Last().y + tempList.Peek().y) / 2;
             double scale = Convert.ToDouble(numericScale.Value);
-            foreach (Pixel p in tempList)
+            while(tempList.Count >0)
             {
-                int x = Convert.ToInt32(p.x * scale), y = Convert.ToInt32(p.y * scale);
+                Pixel p = tempList.Pop();
+                int x = Convert.ToInt32(Math.Floor((p.x-dx) * scale))+dx, y = Convert.ToInt32(Math.Floor((p.y-dy) * scale))+dy;
                 drawPixel(x, y, p.groupId, p.color);
                 if (scale > 1)
                 {
@@ -402,60 +404,42 @@ namespace PaintProject
             }
         }
 
-        private void rotateLButton_Click(object sender, EventArgs e)
+        private void rotate(double degree)
         {
-            List<Pixel> tempList = new List<Pixel>();
+            Stack<Pixel> tempList = new Stack<Pixel>();
+            int dx = 0, dy = 0;
             for (int y = 0; y < Rows; y++)
             {
                 for (int x = 0; x < Columns; x++)
                 {
                     if (pixelMatrix[x, y] != null && pixelMatrix[x, y].groupId != null && pixelMatrix[x, y].groupId == selectedGroupId)
                     {
-                        tempList.Add(pixelMatrix[x, y]);
+                        tempList.Push(pixelMatrix[x, y]);
                         erasePixel(x, y);
                     }
                 }
             }
 
-            double angle = 0.785398;
-            foreach (Pixel p in tempList)
+            double angle = (degree / 360) * (2 * Math.PI);
+            dx = (tempList.Peek().x + tempList.Last().x) / 2;
+            dy = (tempList.Peek().y + tempList.Last().y) / 2;
+
+            while (tempList.Count > 0)
             {
-               
-                int px = Convert.ToInt32((p.x * Math.Cos(angle)) - (p.y * Math.Sin(angle)));
-                int py = Convert.ToInt32((p.x * Math.Sin(angle)) + (p.y * Math.Cos(angle)));
-                Console.WriteLine(String.Format("{0},{1} to {2},{3}", p.x, p.y, px, py));
-                drawPixel(px, py, p.groupId, p.color);
-
-
+                Pixel p = tempList.Pop();
+                int px = Convert.ToInt32(((p.x - dx) * Math.Cos(angle)) - ((p.y - dy) * Math.Sin(angle)));
+                int py = Convert.ToInt32(((p.x - dx) * Math.Sin(angle)) + ((p.y - dy) * Math.Cos(angle)));
+                drawPixel(px + dx, py + dy, p.groupId, p.color);
             }
+        }
+        private void rotateLButton_Click(object sender, EventArgs e)
+        {
+            rotate(-90);
         }
 
         private void rotateRButton_Click(object sender, EventArgs e)
         {
-            List<Pixel> tempList = new List<Pixel>();
-            for (int y = 0; y < Rows; y++)
-            {
-                for (int x = 0; x < Columns; x++)
-                {
-                    if (pixelMatrix[x, y] != null && pixelMatrix[x, y].groupId != null && pixelMatrix[x, y].groupId == selectedGroupId)
-                    {
-                        tempList.Add(pixelMatrix[x, y]);
-                        erasePixel(x, y);
-                    }
-                }
-            }
-
-            double angle = -0.785398;
-            foreach (Pixel p in tempList)
-            {
-
-                int px = Convert.ToInt32((p.x * Math.Cos(angle)) - (p.y * Math.Sin(angle)));
-                int py = Convert.ToInt32((p.x * Math.Sin(angle)) + (p.y * Math.Cos(angle)));
-                Console.WriteLine(String.Format("{0},{1} to {2},{3}", p.x, p.y, px, py));
-                drawPixel(px, py, p.groupId, p.color);
-
-
-            }
+            rotate(90);
         }
 
         private int getautoIncID()

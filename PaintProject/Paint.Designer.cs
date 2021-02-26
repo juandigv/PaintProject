@@ -388,7 +388,7 @@ namespace PaintProject
             // vScrollBar
             // 
             this.vScrollBar.LargeChange = 1;
-            this.vScrollBar.Location = new System.Drawing.Point(955, 31);
+            this.vScrollBar.Location = new System.Drawing.Point(955, 27);
             this.vScrollBar.Maximum = 10;
             this.vScrollBar.Name = "vScrollBar";
             this.vScrollBar.Size = new System.Drawing.Size(17, 628);
