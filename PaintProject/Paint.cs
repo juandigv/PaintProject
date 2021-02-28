@@ -19,13 +19,14 @@ namespace PaintProject
         bool printPixel = false, showGrid = false, drawScreen = true;
         Graphics pixelGraphics;
         Pixel[,] pixelMatrix, tempMatrix;
-        string selectedGroupId = "";
+        string selectedGroupId = "",drawId="";
         public Paint()
         {
             InitializeComponent();
             pixelGraphics = drawingPanel.CreateGraphics();
             UpdateGridValues();
             colorPictureBox.BackColor = colorPen.Color;
+            drawId = "C-" + getautoIncID();
         }
 
         private void Paint_Load(object sender, EventArgs e)
@@ -193,6 +194,7 @@ namespace PaintProject
             if (buttonPaint.Checked)
             {
                 printPixel = false;
+                drawId = "P-" + getautoIncID();
             }
         }
 
@@ -201,7 +203,7 @@ namespace PaintProject
             if (printPixel && buttonPaint.Checked)
             {
                 int fixX = e.X / pixelSize, fixY = e.Y / pixelSize;
-                drawPixel(fixX, fixY, null);
+                drawPixel(fixX, fixY, drawId);
             }
         }
 
